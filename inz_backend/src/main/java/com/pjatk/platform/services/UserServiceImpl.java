@@ -1,25 +1,37 @@
 package com.pjatk.platform.services;
 
 import com.pjatk.platform.models.User;
-import com.pjatk.platform.repositories.UserRepo;
+import com.pjatk.platform.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor()
 public class UserServiceImpl implements UserService {
 
-    private final UserRepo userRepo;
+    private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepo userRepo) {
-        this.userRepo = userRepo;
-    }
+    private final RoleService roleService;
 
 
     @Override
     public List<User> getAllUsers() {
-        return userRepo.findAll();
+        return userRepository.findAll();
     }
+
+    @Override
+    public User createUser(User user){
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+
 }

@@ -1,28 +1,44 @@
 package com.pjatk.platform.models;
 
 import com.pjatk.platform.enums.UserRole;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
-@AllArgsConstructor
+@Data
+@Table(name = "users")
 public class User {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+    public Long id;
 
-    public String Name;
+    @Column(name = "username", unique = true, nullable = false)
+    public String username;
 
-    public String Surname;
+    @Column(name = "password", unique = true, nullable = false)
+    public String password;
 
-    public UserRole UserRole;
+    @Column(name = "email", unique = true, nullable = false)
+    public String email;
 
-    public User() {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
-    }
 }

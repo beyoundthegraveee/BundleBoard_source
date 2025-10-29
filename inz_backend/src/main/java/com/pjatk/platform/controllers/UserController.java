@@ -3,15 +3,13 @@ package com.pjatk.platform.controllers;
 import com.pjatk.platform.models.User;
 import com.pjatk.platform.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/secured")
 public class UserController {
 
     private final UserService userService;
@@ -21,8 +19,22 @@ public class UserController {
     }
 
 
-    @GetMapping()
-    public List<User> showAllUsers(){
+    @GetMapping("/info")
+    public String getUser(Principal principal) {
+        if (principal != null) {
+            return principal.getName();
+        }
+        return null;
+    }
+
+    @GetMapping("/users")
+    public List<User> getUsers() {
         return userService.getAllUsers();
     }
+
+
+
+
+
+
 }
